@@ -15,7 +15,7 @@ a=3
 ui <- fluidPage(
    
    # Application title
-   titlePanel("NEW TITLE"),
+   titlePanel("NEW TITLE 2"),
    
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
