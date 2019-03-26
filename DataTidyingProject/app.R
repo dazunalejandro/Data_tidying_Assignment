@@ -9,11 +9,13 @@
 
 library(shiny)
 
+a=3
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
    
    # Application title
-   titlePanel("Old"),
+   titlePanel("NEW TITLE"),
    
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
