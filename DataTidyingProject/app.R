@@ -13,8 +13,6 @@ source("Preprocessing.R")
 list_choices <-  unique(movies_1016$genre)
 vote_choices <- unique(movies_1016$votesFactor)
 
-#theme = shinytheme("cyborg"),
-# Define UI for application that draws a histogram
 ui <- navbarPage(h3("Movie Industry Analysis"),
                  theme = shinytheme("flatly"),
                  tabPanel(h4("Income "),
@@ -27,6 +25,9 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                                                    selected ="Comedy")
                               ),
                               mainPanel(
+                                div("Use the panel on the left to  to compare the yearly gross income of movies
+                                           per genre", 
+                                            style = "color:black",style = "font-family: 'times'; font-si20pt"),
                                 plotOutput(outputId = "value1")
                               
                             )
@@ -48,16 +49,19 @@ server <- function(input, output, session) {
     
     ggplot(movies_subset) +
       ggtitle("Yearly Gross Income") +
-      theme(plot.title = element_text(hjust = 0.5))+
       aes(x=year,y=grossPergenre,fill=genre,color=genre) +
+      labs(x="Year",y="Gross Income") +
+      theme(plot.title = element_text(size=20,hjust = 0.5),
+            axis.title=element_text(size=17),
+            legend.text = element_text(size = 17),
+            legend.title = element_text(size = 17)) +
       #facet_wrap(~genre) +
       #scale_y_continuous() +
       geom_line(size=1)+
-      geom_point(size=2) +
-      labs(x="Year",y="Gross Income") +
-      theme_minimal()
+      geom_point(size=2) 
   })
 }
+?theme
 
 # Run the application 
 shinyApp(ui = ui, server = server)
