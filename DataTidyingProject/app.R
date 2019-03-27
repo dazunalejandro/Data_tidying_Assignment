@@ -3,7 +3,7 @@ library(shinythemes)
 source("Preprocessing.R")
 list_choices <-  unique(movies_1016$genre)
 vote_choices <- unique(movies_1016$votesFactor)
-a=3
+
 ui <- navbarPage(h3("Movie Industry Analysis"),
                  theme = shinytheme("flatly"),
                  tabPanel(h4("Income "),
@@ -35,7 +35,7 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                                               choices =vote_choices,
                                               selected ="Popular"),
                            checkboxGroupInput("checkGroup3", 
-                                              h4("Facet by Genre"), 
+                                              h4("Facet by Three Genre"), 
                                               choices =list_choices,
                                               selected ="Comedy")
                          ),
