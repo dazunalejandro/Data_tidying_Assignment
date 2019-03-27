@@ -44,7 +44,20 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                          )
                        )
                      )
-            )
+            ),
+            tabPanel("Origen ",
+                     fluidPage( 
+                       sidebarLayout(# position = "right",
+                         sidebarPanel(
+                           sliderInput("slider", label = h3("Slider Range"), min = 2010, 
+                                       max = 2016, value = c(2014, 2015))
+                         ),
+                         mainPanel(
+                           plotOutput(outputId = "range")
+                         )
+                       )
+                     ) # fluidPage
+            )#  titlePanel
 )
 
 
@@ -53,7 +66,9 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
 server <- function(input, output, session) {
   
   
-  
+  ########################################
+  ####################Panel 1 (Plot)
+  ########################################
   
   output$value1 <- renderPlot({
     movies_subset <- movies_1016 %>%
@@ -78,7 +93,7 @@ server <- function(input, output, session) {
   })
   
   ########################################
-  ####################Panel 2
+  ####################Panel 2 (Plot)
   ########################################
   
   
@@ -101,6 +116,35 @@ server <- function(input, output, session) {
       stat_density(geom = "line",size=0.5) 
      #geom_bar()
   })
+  
+  
+  ########################################
+  ####################Panel 3 (Plot)
+  ########################################
+  
+  output$range <- renderPlot({ 
+    movies_1016 <- movies_1016 %>%
+      filter(year >= input$slider[1] & year <= input$slider[2]) %>%
+      group_by(continent,rating) %>% tally() %>%
+      mutate(freq = n/sum(n), cum = 1- cumsum(freq))
+    
+    
+    movies_1016_breaks <- movies_1016$cum[movies_1016$cum>0]
+    
+    ggplot(movies_1016) +
+      coord_polar("y", start=0) +
+      geom_bar(aes(x="", y=freq, fill=rating), stat = "identity") +
+      facet_wrap(~continent)+
+      scale_y_continuous(labels = scales::percent,breaks = movies_1016_breaks) +
+      theme(axis.line = element_blank(),
+            axis.title=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    
+    
+  })
+  
+  
 }
 
 
