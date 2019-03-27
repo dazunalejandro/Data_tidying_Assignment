@@ -9,42 +9,36 @@
 
 library(shiny)
 
-a=3
+source("Preprocessing.R")
+list_choices <-  unique(movies_1016$genre)
+vote_choices <- unique(movies_1016$votesFactor)
+
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
-   
-   # Application title
-   titlePanel("NEW TITLE 2"),
-   
-   # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
-      
-      # Show a plot of the generated distribution
-      mainPanel(
-         plotOutput("distPlot")
-      )
-   )
+ui <- navbarPage("Movie Industry Analysis",
+                 
+                 tabPanel("Income ",
+                          fluidPage( 
+                            sidebarLayout(# position = "right",
+                              sidebarPanel(
+                                checkboxGroupInput("checkGroup", 
+                                                   h3("Select Genre"), 
+                                                   choices =list_choices,
+                                                   selected ="Comedy")
+                              ),
+                              mainPanel(
+                                plotOutput(outputId = "value1")
+                              )
+                            )
+                          ) # fluidPage
+                 ) #  titlePa
 )
+
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
    
-   output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
-   })
+   
 }
 
 # Run the application 
