@@ -8,45 +8,56 @@
 #
 
 library(shiny)
+library(shinythemes)
+source("Preprocessing.R")
+list_choices <-  unique(movies_1016$genre)
+vote_choices <- unique(movies_1016$votesFactor)
 
-a=3
-
+#theme = shinytheme("cyborg"),
 # Define UI for application that draws a histogram
-ui <- fluidPage(
-   
-   # Application title
-   titlePanel("NEW TITLE 2"),
-   
-   # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
-      
-      # Show a plot of the generated distribution
-      mainPanel(
-         plotOutput("distPlot")
-      )
-   )
+ui <- navbarPage(h3("Movie Industry Analysis"),
+                 theme = shinytheme("flatly"),
+                 tabPanel(h4("Income "),
+                          fluidPage( 
+                            sidebarLayout(
+                              sidebarPanel(
+                                checkboxGroupInput("checkGroup", 
+                                                   h4("Select Genre"), 
+                                                   choices =list_choices,
+                                                   selected ="Comedy")
+                              ),
+                              mainPanel(
+                                plotOutput(outputId = "value1")
+                              
+                            )
+                          ) # fluidPage
+                 )
+            )#  titlePage
 )
 
+
+
 # Define server logic required to draw a histogram
-server <- function(input, output) {
-   
-   output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
-   })
+server <- function(input, output, session) {
+  
+  output$value1 <- renderPlot({
+    movies_subset <- movies_1016 %>%
+      filter(genre %in% input$checkGroup)
+    
+    
+    
+    ggplot(movies_subset) +
+      ggtitle("Yearly Gross Income") +
+      theme(plot.title = element_text(hjust = 0.5))+
+      aes(x=year,y=grossPergenre,fill=genre,color=genre) +
+      #facet_wrap(~genre) +
+      #scale_y_continuous() +
+      geom_line(size=1)+
+      geom_point(size=2) +
+      labs(x="Year",y="Gross Income") +
+      theme_minimal()
+  })
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-

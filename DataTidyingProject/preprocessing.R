@@ -71,7 +71,7 @@ movies_1016 <- movies_1016 %>%
 movies_1016 <- movies_1016 %>%
   group_by(year,genre) %>%
   mutate(grossPergenre=(sum(gross)))
-View(movies_1016)
+
 
 
 ###############################
@@ -81,5 +81,3 @@ movies_1016$budget <- log(movies_1016$budget)
 movies_1016$grossPergenre <- log(movies_1016$grossPergenre)
 movies_1016$votes <- log(movies_1016$votes)
 movies_1016$gross <- log(movies_1016$gross)
-
-View(movies_1016)
