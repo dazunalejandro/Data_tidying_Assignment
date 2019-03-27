@@ -46,3 +46,30 @@ movies_1016 <- movies_1016 %>%
   mutate(votesFactor=cut(votes, breaks=c(-Inf, 73864,158515, Inf), labels=c("Unpopular","Average","Popular")))
 
 
+###############################
+###############Reduce the number of levels of rating factor
+###############################
+movies_1016$rating[movies_1016$rating=="UNRATED"] <- "G"
+movies_1016$rating[movies_1016$rating=="Not specified"] <- "G"
+movies_1016$rating[movies_1016$rating=="NOT RATED"] <- "G"
+movies_1016$rating[movies_1016$rating=="TV-MA"] <- "NC-17"
+movies_1016$rating[movies_1016$rating=="B"] <- "PG-13"
+movies_1016$rating[movies_1016$rating=="B15"] <- "PG-13"
+movies_1016$rating[movies_1016$rating=="TV-14"] <- "PG-13"
+
+
+###############################
+###############Convert runtime numeric to factor of three levels
+###############################
+movies_1016 <- movies_1016 %>% 
+  mutate(runtime=cut(runtime, breaks=c(-Inf, 120, 140, Inf), labels=c("Short RT","Average RT","Long RT")))
+
+
+###############################
+###############Create a new variable "gross per genre"
+###############################
+movies_1016 <- movies_1016 %>%
+  group_by(year,genre) %>%
+  mutate(grossPergenre=(sum(gross)))
+
+
