@@ -33,7 +33,26 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                             )
                           ) # sidebarLayout
                  ) # fluidPage
-            )# Panel 1
+            ),# Panel 1
+            tabPanel(h4("Critics vs Viewer"),
+                     fluidPage( 
+                       sidebarLayout(# position = "right",
+                         sidebarPanel(
+                           checkboxGroupInput("checkGroup2", 
+                                              h4("Select Popularity Level"), 
+                                              choices =vote_choices,
+                                              selected ="Popular"),
+                           checkboxGroupInput("checkGroup3", 
+                                              h4("Facet by Genre"), 
+                                              choices =list_choices,
+                                              selected ="Comedy")
+                         ),
+                         mainPanel(
+                           plotOutput(outputId = "value2")
+                         )
+                       )
+                     )
+            )
 )
 
 
@@ -44,6 +63,7 @@ server <- function(input, output, session) {
   ########################################
   ####################Panel 1
   #######################################
+  
   
   output$value1 <- renderPlot({
     movies_subset <- movies_1016 %>%
@@ -70,6 +90,29 @@ server <- function(input, output, session) {
   ########################################
   ####################Panel 2
   ########################################
+  
+  
+  output$value2 <- renderPlot({ 
+    
+    
+    movies_subset <- movies_1016 %>%
+      filter(votesFactor %in% input$checkGroup2) %>%
+      filter(genre %in% input$checkGroup3)
+    
+    ggplot(movies_subset) +
+      aes(x=score,fill=votesFactor,color=votesFactor) +
+      scale_colour_discrete(name="Popularity Level")+
+      facet_grid(~genre)+
+      labs(x="Score",y="Density") +
+      theme(plot.title = element_text(size=20,hjust = 0.5),
+            axis.title=element_text(size=17),
+            legend.text = element_text(size = 17),
+            legend.title = element_text(size = 17)) +
+      stat_density(geom = "line",size=0.5) 
+     #geom_bar()
+  })
+  
+  
  
 }
 
