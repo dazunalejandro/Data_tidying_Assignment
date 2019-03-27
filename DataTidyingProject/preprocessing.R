@@ -59,7 +59,7 @@ movies_1016$rating[movies_1016$rating=="TV-14"] <- "PG-13"
 
 
 ###############################
-###############Convert runtime numeric to factor of three levels
+###############Convert runtime to factor of three levels
 ###############################
 movies_1016 <- movies_1016 %>% 
   mutate(runtime=cut(runtime, breaks=c(-Inf, 120, 140, Inf), labels=c("Short RT","Average RT","Long RT")))
