@@ -53,6 +53,7 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                        )
                      )
             )
+            
 )
 
 
