@@ -34,25 +34,7 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                           ) # sidebarLayout
                  ) # fluidPage
             )# Panel 1
-            tabPanel(h4("Critics  vs Viewers"),
-                     fluidPage( 
-                       sidebarLayout(# position = "right",
-                         sidebarPanel(
-                           checkboxGroupInput("checkGroup2", 
-                                              h4("Select Popularity Level"), 
-                                              choices =vote_choices,
-                                              selected ="Popular"),
-                           checkboxGroupInput("checkGroup3", 
-                                              h4("Facet by three Genres"), 
-                                              choices =list_choices,
-                                              selected ="Comedy")
-                         ),
-                         mainPanel(
-                           plotOutput(outputId = "value2")
-                         )
-                       )
-                     )
-            )
+            
 )
 
 
