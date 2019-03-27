@@ -1,5 +1,6 @@
 library(shiny)
 library(shinythemes)
+library(gridExtra)
 source("Preprocessing.R")
 list_choices <-  unique(movies_1016$genre)
 vote_choices <- unique(movies_1016$votesFactor)
@@ -35,7 +36,7 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                                               choices =vote_choices,
                                               selected ="Popular"),
                            checkboxGroupInput("checkGroup3", 
-                                              h4("Facet by Three Genre"), 
+                                              h4("Facet by three Genre"), 
                                               choices =list_choices,
                                               selected ="Comedy")
                          ),
@@ -45,11 +46,11 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                        )
                      )
             ),
-            tabPanel("Origen ",
+            tabPanel(h4("Origen "),
                      fluidPage( 
                        sidebarLayout(# position = "right",
                          sidebarPanel(
-                           sliderInput("slider", label = h3("Slider Range"), min = 2010, 
+                           sliderInput("slider", label = h4("Select Time Range"), min = 2010, 
                                        max = 2016, value = c(2014, 2015))
                          ),
                          mainPanel(
@@ -123,24 +124,114 @@ server <- function(input, output, session) {
   ########################################
   
   output$range <- renderPlot({ 
-    movies_1016 <- movies_1016 %>%
+    
+    #########
+    ####America
+    #########
+    movies_subset <- movies_1016 %>%
       filter(year >= input$slider[1] & year <= input$slider[2]) %>%
-      group_by(continent,rating) %>% tally() %>%
+      filter(continent=="America") %>%
+      group_by(scoreFactor) %>% tally() %>%
+      mutate(freq = n/sum(n), cum = 1- cumsum(freq))
+    
+  
+    
+    
+    movies_1016_breaks1 <- movies_subset$cum[movies_subset$cum>0]
+    
+    first_plot <- ggplot(movies_subset) +
+          coord_polar("y", start=0) +
+          geom_bar(aes(x="", y=freq, fill=scoreFactor), stat = "identity") +
+          scale_fill_discrete(name="Score Value")+
+          scale_y_continuous(labels = scales::percent,breaks = movies_1016_breaks1) +
+          theme(plot.title = element_text(size=20,hjust = 0.5),
+                axis.line = element_blank(),
+                axis.title=element_blank(),
+                axis.text.y=element_blank(),
+                axis.ticks.y=element_blank()) +
+          ggtitle("America")
+    
+    #########
+    ####Europe
+    #########
+    movies_subset2 <- movies_1016 %>%
+      filter(year >= input$slider[1] & year <= input$slider[2]) %>%
+      filter(continent=="Europe") %>%
+      group_by(scoreFactor) %>% tally() %>%
       mutate(freq = n/sum(n), cum = 1- cumsum(freq))
     
     
-    movies_1016_breaks <- movies_1016$cum[movies_1016$cum>0]
     
-    ggplot(movies_1016) +
+    
+    movies_1016_breaks2 <- movies_subset2$cum[movies_subset2$cum>0]
+    
+    second_plot <- ggplot(movies_subset2) +
+          coord_polar("y", start=0) +
+          geom_bar(aes(x="", y=freq, fill=scoreFactor), stat = "identity") +
+          scale_fill_discrete(name="Score Value")+
+          scale_y_continuous(labels = scales::percent,breaks = movies_1016_breaks2) +
+          theme(plot.title = element_text(size=20,hjust = 0.5),
+                axis.line = element_blank(),
+                axis.title=element_blank(),
+                axis.text.y=element_blank(),
+                axis.ticks.y=element_blank()) +
+          ggtitle("Europe")
+    
+    #########
+    ####Asia
+    #########
+    
+    movies_subset3 <- movies_1016 %>%
+      filter(year >= input$slider[1] & year <= input$slider[2]) %>%
+      filter(continent=="Asia") %>%
+      group_by(scoreFactor) %>% tally() %>%
+      mutate(freq = n/sum(n), cum = 1- cumsum(freq))
+    
+    
+    
+    
+    movies_1016_breaks3 <- movies_subset3$cum[movies_subset3$cum>0]
+    
+    third_plot <- ggplot(movies_subset3) +
       coord_polar("y", start=0) +
-      geom_bar(aes(x="", y=freq, fill=rating), stat = "identity") +
-      facet_wrap(~continent)+
-      scale_y_continuous(labels = scales::percent,breaks = movies_1016_breaks) +
-      theme(axis.line = element_blank(),
+      geom_bar(aes(x="", y=freq, fill=scoreFactor), stat = "identity") +
+      scale_fill_discrete(name="Score Value") +
+      scale_y_continuous(labels = scales::percent,breaks = movies_1016_breaks3) +
+      theme(plot.title = element_text(size=20,hjust = 0.5),
+            axis.line = element_blank(),
             axis.title=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())
+            axis.ticks.y=element_blank()) +
+      ggtitle("Asia")
     
+    #########
+    ####Africa
+    #########
+    
+    movies_subset4 <- movies_1016 %>%
+      filter(year >= input$slider[1] & year <= input$slider[2]) %>%
+      filter(continent=="Africa") %>%
+      group_by(scoreFactor) %>% tally() %>%
+      mutate(freq = n/sum(n), cum = 1- cumsum(freq))
+    
+    
+    
+    
+    movies_1016_breaks4 <- movies_subset3$cum[movies_subset4$cum>0]
+    
+    fourth_plot <- ggplot(movies_subset4) +
+      coord_polar("y", start=0) +
+      geom_bar(aes(x="", y=freq, fill=scoreFactor), stat = "identity") +
+      scale_fill_discrete(name="Score Value")+
+      scale_y_continuous(labels = scales::percent,breaks = movies_1016_breaks4) +
+      theme(plot.title = element_text(size=20,hjust = 0.5),
+            axis.line = element_blank(),
+            axis.title=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank()) +
+      ggtitle("Africa")
+    
+    grid.arrange(first_plot,second_plot,third_plot,fourth_plot, nrow = 2, ncol=2)
     
   })
   

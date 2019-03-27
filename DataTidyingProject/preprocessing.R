@@ -81,3 +81,7 @@ movies_1016$budget <- log(movies_1016$budget)
 movies_1016$grossPergenre <- log(movies_1016$grossPergenre)
 movies_1016$votes <- log(movies_1016$votes)
 movies_1016$gross <- log(movies_1016$gross)
+
+
+
+
