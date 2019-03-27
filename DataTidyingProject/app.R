@@ -3,7 +3,7 @@ library(shinythemes)
 source("Preprocessing.R")
 list_choices <-  unique(movies_1016$genre)
 vote_choices <- unique(movies_1016$votesFactor)
-
+a=3
 ui <- navbarPage(h3("Movie Industry Analysis"),
                  theme = shinytheme("flatly"),
                  tabPanel(h4("Income "),
