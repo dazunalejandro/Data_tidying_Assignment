@@ -4,6 +4,7 @@ library(gridExtra)
 source("Preprocessing.R")
 list_choices <-  unique(movies_1016$genre)
 vote_choices <- unique(movies_1016$votesFactor)
+cont_choices <- names(movies_1016)[c(1,6,10,11,13)]
 
 ui <- navbarPage(h3("Movie Industry Analysis"),
                  theme = shinytheme("flatly"),
@@ -58,7 +59,23 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                          )
                        )
                      ) # fluidPage
-            )#  titlePanel
+            ),#  titlePanel
+            tabPanel(h4("Clustering "),
+                     fluidPage( 
+                       sidebarLayout(# position = "right",
+                         sidebarPanel(
+                           selectInput('xcol', 'Select First Variable', cont_choices),
+                           selectInput('ycol', 'Select Second Variable', cont_choices,
+                                       selected=cont_choices[[2]]),
+                           numericInput('clusters', 'Cluster count', 3,
+                                        min = 1, max = 9)
+                         ),
+                         mainPanel(
+                           #plotOutput(outputId = "range")
+                         )
+                       )
+                     )#  fluid Page
+            )# TitlePanel
 )
 
 
