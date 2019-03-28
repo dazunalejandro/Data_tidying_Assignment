@@ -1,5 +1,6 @@
 library(RCurl)
 library(tidyverse)
+library(factoextra)
 file_name <- getURL("https://raw.githubusercontent.com/dazunalejandro/Data_tidying_Assignment/master/DataTidyingProject/movies.csv")
 movies <- read.csv(text = file_name)
 
@@ -81,7 +82,5 @@ movies_1016$budget <- log(movies_1016$budget)
 movies_1016$grossPergenre <- log(movies_1016$grossPergenre)
 movies_1016$votes <- log(movies_1016$votes)
 movies_1016$gross <- log(movies_1016$gross)
-
-
 
 

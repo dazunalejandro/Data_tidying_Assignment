@@ -5,6 +5,7 @@ source("Preprocessing.R")
 list_choices <-  unique(movies_1016$genre)
 vote_choices <- unique(movies_1016$votesFactor)
 
+
 ui <- navbarPage(h3("Movie Industry Analysis"),
                  theme = shinytheme("flatly"),
                  tabPanel(h4("Income "),
@@ -58,7 +59,7 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                          )
                        )
                      ) # fluidPage
-            )#  titlePanel
+            ),#  titlePanel
 )
 
 
