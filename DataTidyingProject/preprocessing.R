@@ -83,6 +83,32 @@ movies_1016$budget <- log(movies_1016$budget)
 movies_1016$grossPergenre <- log(movies_1016$grossPergenre)
 movies_1016$votes <- log(movies_1016$votes)
 movies_1016$gross <- log(movies_1016$gross)
-
-
-
+# 
+# names(movies_1016)
+# data <- movies_1016[, c(1, 6)]
+# clusters <- kmeans(data, 2)
+# pclusters$size/
+# Index_cluster1=which(kmeans(data, 2)$cluster==1)
+# # Index_cluster2=which(kmeans(data, 2)$cluster==2)
+# # Index_cluster3=which(kmeans(data, 2)$cluster==3)
+# # Index_cluster4=which(kmeans(data, 2)$cluster==4)
+# # Index_cluster5=which(kmeans(data, 2)$cluster==5)
+# # Index_cluster6=which(kmeans(data, 2)$cluster==6)
+# # Index_cluster7=which(kmeans(data, 2)$cluster==7)
+# # Index_cluster8=which(kmeans(data, 2)$cluster==7)
+# # Index_cluster1
+# data_count <- movies_1016 %>%
+#   filter(row_number() %in% Index_cluster1) %>%
+#   group_by(genre) %>%
+#   tally() %>%
+#   mutate(freq = n/sum(n))
+# 
+# which
+# c <- (data_count$genre[which.max(data_count$n)])
+# data_count
+# tab <- which.max(table(movies_1016[Index_cluster1,]$genre))
+# tab
+# tab <- which.max(table(movies_1016[Index_cluster1,]$genre))
+# tab
+# tab<-max(table(movies_1016[Index_cluster1,]$genre))
+# tab

@@ -2,6 +2,7 @@ library(shiny)
 library(shinythemes)
 library(gridExtra)
 library(ggpubr)
+library(PerformanceAnalytics)
 source("Preprocessing.R")
 list_choices <-  unique(movies_1016$genre)
 vote_choices <- unique(movies_1016$votesFactor)
@@ -168,6 +169,7 @@ server <- function(input, output, session) {
                 axis.text.y=element_blank(),
                 axis.ticks.y=element_blank(),
                 legend.position = "none") +
+          #theme_minimal()+
           ggtitle("America")
     
     #########
@@ -195,6 +197,7 @@ server <- function(input, output, session) {
                 axis.text.y=element_blank(),
                 axis.ticks.y=element_blank(),
                 legend.position = "none") +
+          #theme_minimal()+
           ggtitle("Europe")
     
     #########
@@ -223,6 +226,7 @@ server <- function(input, output, session) {
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank(),
             legend.position = "none") +
+      #theme_minimal()+
       ggtitle("Asia")
     
     #########
@@ -251,6 +255,7 @@ server <- function(input, output, session) {
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank(),
             legend.position = "none") +
+      #theme_minimal()+
       ggtitle("Africa")
     
     ggarrange(first_plot,second_plot,third_plot,fourth_plot, nrow = 2, ncol=2,
@@ -270,9 +275,15 @@ server <- function(input, output, session) {
   
   clusters <- reactive({
     kmeans(selectedData(), input$num_clusters)
+    
   })
   
   output$plot1 <- renderPlot({
+    
+    
+    percentages <-  (clusters()$size/nrow(movies_1016))*100
+    
+    
     palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
               "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
     
@@ -280,8 +291,12 @@ server <- function(input, output, session) {
     plot(selectedData(),
          col = clusters()$cluster,
          pch = 20, cex = 3)
-    points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
-  })
+    #paste(round(100*m, 2), "%", sep="")
+    
+    #points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
+    text(clusters()$centers, y = NULL, labels=paste(round(percentages,2),"%",sep=""),cex = 1,col=0)
+    #chart.Correlation(selectedData(), histogram=TRUE, pch=19)
+})
   
   
   
