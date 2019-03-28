@@ -1,9 +1,12 @@
 library(shiny)
 library(shinythemes)
 library(gridExtra)
+library(ggpubr)
 source("Preprocessing.R")
 list_choices <-  unique(movies_1016$genre)
 vote_choices <- unique(movies_1016$votesFactor)
+cont_choices <- names(movies_1016)[c(1,6,11,13)]
+year_choices <- unique(movies_1016$year)
 
 
 ui <- navbarPage(h3("Movie Industry Analysis"),
@@ -18,9 +21,6 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                                                    selected ="Comedy")
                               ),
                               mainPanel(
-                                div("Use the panel on the left to  to compare the yearly gross income of movies
-                                           per genre", 
-                                            style = "color:black",style = "font-family: 'times'; font-si20pt"),
                                 plotOutput(outputId = "value1")
                               
                             )
@@ -50,9 +50,10 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
             tabPanel(h4("Origen "),
                      fluidPage( 
                        sidebarLayout(# position = "right",
-                         sidebarPanel(
-                           sliderInput("slider", label = h4("Select Time Range"), min = 2010, 
-                                       max = 2016, value = c(2014, 2015))
+                          sidebarPanel(
+                            sliderInput("slider", label = h4("Select Time Range"), min = 2005, 
+                                     max = 2016, value = c(2014, 2015))
+                            #selectInput('year', 'Select Year',year_choices)
                          ),
                          mainPanel(
                            plotOutput(outputId = "range")
@@ -60,6 +61,22 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                        )
                      ) # fluidPage
             ),#  titlePanel
+            tabPanel(h4("Clustering "),
+                     fluidPage( 
+                       sidebarLayout(# position = "right",
+                         sidebarPanel(
+                           selectInput('xcol', 'Select First Variable', cont_choices),
+                           selectInput('ycol', 'Select Second Variable', cont_choices,
+                                       selected=cont_choices[[2]]),
+                           numericInput('num_clusters', 'Select number of cluster', 3,
+                                        min = 1, max = 9)
+                         ),
+                         mainPanel(
+                           plotOutput('plot1')
+                         )
+                       )
+                     )#  fluid Page
+            )# TitlePanel
 )
 
 
@@ -149,7 +166,8 @@ server <- function(input, output, session) {
                 axis.line = element_blank(),
                 axis.title=element_blank(),
                 axis.text.y=element_blank(),
-                axis.ticks.y=element_blank()) +
+                axis.ticks.y=element_blank(),
+                legend.position = "none") +
           ggtitle("America")
     
     #########
@@ -175,7 +193,8 @@ server <- function(input, output, session) {
                 axis.line = element_blank(),
                 axis.title=element_blank(),
                 axis.text.y=element_blank(),
-                axis.ticks.y=element_blank()) +
+                axis.ticks.y=element_blank(),
+                legend.position = "none") +
           ggtitle("Europe")
     
     #########
@@ -202,7 +221,8 @@ server <- function(input, output, session) {
             axis.line = element_blank(),
             axis.title=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank()) +
+            axis.ticks.y=element_blank(),
+            legend.position = "none") +
       ggtitle("Asia")
     
     #########
@@ -229,12 +249,40 @@ server <- function(input, output, session) {
             axis.line = element_blank(),
             axis.title=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank()) +
+            axis.ticks.y=element_blank(),
+            legend.position = "none") +
       ggtitle("Africa")
     
-    grid.arrange(first_plot,second_plot,third_plot,fourth_plot, nrow = 2, ncol=2)
+    ggarrange(first_plot,second_plot,third_plot,fourth_plot, nrow = 2, ncol=2,
+                 common.legend=TRUE, legend="bottom",
+              font.label = list(size = 20))
+    
     
   })
+  
+  ########################################
+  ####################Panel 4 (Plot)
+  ########################################
+  
+  selectedData <- reactive({
+    movies_1016[, c(input$xcol, input$ycol)]
+  })
+  
+  clusters <- reactive({
+    kmeans(selectedData(), input$num_clusters)
+  })
+  
+  output$plot1 <- renderPlot({
+    palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
+              "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
+    
+    par(mar = c(5.1, 4.1, 0, 1))
+    plot(selectedData(),
+         col = clusters()$cluster,
+         pch = 20, cex = 3)
+    points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
+  })
+  
   
   
 }

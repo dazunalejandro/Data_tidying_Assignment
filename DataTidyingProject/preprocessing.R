@@ -10,8 +10,9 @@ movies <- as.tibble(movies)
 ###############Only consider movies from 2010-2016
 ###############################
 movies_1016 <- movies%>%
-  filter(year %in% c("2010","2011","2012","2013","2014","2015","2016")) %>%
-  filter(budget != 0)
+  filter(year %in% c("2005","2006","2007","2008","2009",
+                     "2010","2011","2012","2013","2014","2015","2016")) %>%
+          filter(budget != 0)
 
 
 ###############################
@@ -82,5 +83,6 @@ movies_1016$budget <- log(movies_1016$budget)
 movies_1016$grossPergenre <- log(movies_1016$grossPergenre)
 movies_1016$votes <- log(movies_1016$votes)
 movies_1016$gross <- log(movies_1016$gross)
+
 
 
