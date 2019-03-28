@@ -62,7 +62,9 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                        )
                      ) # fluidPage
             ),#  titlePanel
-            tabPanel(h4("Clustering "),
+            navbarMenu(h4("More"),
+                    tabPanel(h4("Clustering"),
+                                
                      fluidPage( 
                        sidebarLayout(# position = "right",
                          sidebarPanel(
@@ -77,8 +79,25 @@ ui <- navbarPage(h3("Movie Industry Analysis"),
                          )
                        )
                      )#  fluid Page
-            )# TitlePanel
+                 ),# Tab Panel
+                 tabPanel(h4("Correlations"),
+                          
+                          fluidPage( 
+                            sidebarLayout(# position = "right",
+                              sidebarPanel(
+                                selectInput('xcol1', 'Select First Variable', cont_choices),
+                                selectInput('ycol2', 'Select Second Variable', cont_choices,
+                                            selected=cont_choices[[2]])
+                              ),
+                              mainPanel(
+                                plotOutput('plot2')
+                              )
+                            )
+                          )#  fluid Page
+                 )# Tab Panel
+            )# navbarMenu
 )
+            
 
 
 
@@ -266,15 +285,15 @@ server <- function(input, output, session) {
   })
   
   ########################################
-  ####################Panel 4 (Plot)
+  ####################Panel 4 (Plot 1)
   ########################################
   
-  selectedData <- reactive({
+  selectedData1 <- reactive({
     movies_1016[, c(input$xcol, input$ycol)]
   })
   
   clusters <- reactive({
-    kmeans(selectedData(), input$num_clusters)
+    kmeans(selectedData1(), input$num_clusters)
     
   })
   
@@ -288,7 +307,7 @@ server <- function(input, output, session) {
               "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
     
     #par(mar = c(5.1, 4.1, 0, 1))
-    plot(selectedData(),
+    plot(selectedData1(),
          col = clusters()$cluster,
          pch = 20, cex = 3, main = "Movies by Group")
     #paste(round(100*m, 2), "%", sep="")
@@ -296,7 +315,23 @@ server <- function(input, output, session) {
     #points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
     text(clusters()$centers, y = NULL, labels=paste(round(percentages,2),"%",sep=""),cex = 1,col=0)
     #chart.Correlation(selectedData(), histogram=TRUE, pch=19)
-})
+    
+    
+    })
+  
+      ########################################
+      ####################Panel 4 (Plot 2)
+      ########################################
+      selectedData2 <- reactive({
+        movies_1016[, c(input$xcol1, input$ycol2)]
+      })
+    
+    output$plot2 <- renderPlot({
+      
+    
+        chart.Correlation(selectedData2(), histogram=TRUE, pch=19)
+    
+    })
   
   
   
