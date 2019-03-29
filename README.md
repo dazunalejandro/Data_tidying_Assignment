@@ -1,12 +1,11 @@
 # Data_tidying_Assignment
-Assignment 
 
-Master Title: Statistics for Data Science
+Master Title: Master in  Statistics for Data Science
 
-Course title: Data tidying and Reporting
+Course Title: Data Tidying and Reporting
 
 Year: 1
 
-Team members: Alejandro Dazun, Miguel Novillo
+Team Members: Alejandro Dazun, Miguel Novillo
 
 GitHub repository url: https://github.com/dazunalejandro/Data_tidying_Assignment.git
