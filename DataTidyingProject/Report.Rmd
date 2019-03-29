@@ -1,0 +1,53 @@
+---
+title: "Project of Data Tidying and Reporting"
+author:
+- name: "Miguel NOVILLO"
+- name: "Alejandro DAZUN"
+
+date: "29 de marzo de 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Purpose  
+##### This application shows a descriptive analysis about the film industry, distributed through four panels.  
+
+#### The first panel "INCOME" shows a time series graph for variables: gross and gender and it shows the evolution of the income accumulated by the different genres. 
+
+#### The second panel "CRISTICS VS VIEWER" shows several density plots of the variable score, for the different types of genre. The objective is identified the distribution of the variables "score" for the different categories of the film "unpopular, popular and average" and to see if there is a relationship between the score of the critics with respect to the public's assessment. For the selection of gender categories, it was created a checkbox.
+
+#### The third panel "ORIGIN", considers the variables: score, continent and year. The purpose of the panel is to show the number of films in each of continent by variable "votesFactor", selecting through a range of time with a "date sliders" widget.
+#### The fourth panel has the options of correlation and clustering. The variables Budget, gross, score and votes are considered in the correlation part. The purpose is to identify the relationship between a pair of variables using a scatterplot and to show the magnitude of the correlation.
+#### In the part of the group, the films were classified by two dimensions among the variables: budget, gross, score and votes. In each group, the percentage of films is shown. To show the interaction, it was used the "number of clusters" parameter using a "numeric entry" widget.
+ 
+
+### Description of the data
+
+#### Name of dataset: movies
+
+#### The data was obtained from web site https://www.kaggle.com/.
+
+| No. | Variable name |   | Measure   |   |
+|-----|---------------|---|-----------|---|
+| 1   | budget        |   | numeric   |   |
+| 2   | company       |   | factor    |   |
+| 3   | country       |   | factor    |   |
+| 4   | director      |   | factor    |   |
+| 5   | genre         |   | factor    |   |
+| 6   | gross         |   | numeric   |   |
+| 7   | name          |   | factor    |   |
+| 8   | rating        |   | factor    |   |
+| 9   | released      |   | factor    |   |
+| 10  | runtime       |   | factor    |   |
+| 11  | score         |   | numeric   |   |
+| 12  | star          |   | factor    |   |
+| 13  | votes         |   | numeric   |   |
+| 14  | writer        |   | factor    |   |
+| 15  | year          |   | integer   |   |
+| 16  | continent     |   | character |   |
+| 17  | scoreFactor   |   | factor    |   |
+| 18  | votesFactor   |   | factor    |   |
+| 19  | grossPergenre |   | numeric   |   |
